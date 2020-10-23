@@ -54,7 +54,7 @@ galaxy_info:
     # Replace the below with your platform list:
     - name: Fedora
       versions:
-        - all
+        - 31
     - name: EL
       versions:
         - all
