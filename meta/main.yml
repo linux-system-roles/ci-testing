@@ -52,12 +52,9 @@ galaxy_info:
   #   - 99.99
   platforms:
     # Replace the below with your platform list:
-    - name: Fedora
-      versions:
-        - all
     - name: EL
       versions:
-        - all
+        - 8
 
   galaxy_tags: []
   # List tags for your role here, one per line. A tag is a keyword that
