@@ -2,7 +2,7 @@ name: test with tox
 on:  # yamllint disable-line rule:truthy
   - pull_request
 jobs:
-  build:
+  runtox:
     runs-on: ubuntu-latest
     steps:
       - name: checkout PR
@@ -11,10 +11,19 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Install dependencies
+      - name: Install platform dependencies
+        run: |
+          set -euxo pipefail
+          .travis/preinstall
+      - name: Install pip, tox, python dependencies
         run: |
           set -euxo pipefail
           python -m pip install --upgrade pip
           pip install tox
-      - name: Run tox
-        run: tox
+      - name: Run tox tests
+        run: |
+          set -euxo pipefail
+          .travis/runtox
+        env:
+          LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
+          LSR_MSCENARIOS: default
