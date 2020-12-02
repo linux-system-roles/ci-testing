@@ -1,5 +1,5 @@
 name: test with tox
-on:
+on:  # yamllint disable-line rule:truthy
   - pull_request
 jobs:
   build:
