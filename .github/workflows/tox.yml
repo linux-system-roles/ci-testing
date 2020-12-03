@@ -38,15 +38,18 @@ jobs:
           set -euo pipefail
           curl -sSf --retry 5 -o python-2.6.tar.bz2 ${PY26URL}
           sudo tar xjf python-2.6.tar.bz2 --directory /
+          myuid=$(id -u)
+          mygid=$(id -g)
+          sudo chown -R $myuid:$mygid /home/travis/virtualenv
           source /home/travis/virtualenv/python2.6/bin/activate
           set -x
           python --version
           pip --version
-          sudo pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
+          pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
           configparser \
           git+https://github.com/linux-system-roles/tox-lsr@0.0.1
           lsr_travis_preinstall
-          sudo pip list
+          pip list
         env:
           # yamllint disable-line rule:line-length
           PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
