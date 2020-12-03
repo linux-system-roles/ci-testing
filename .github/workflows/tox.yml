@@ -49,7 +49,7 @@ jobs:
           set -euo pipefail
           source /home/travis/virtualenv/python2.6/bin/activate
           set -x
-          sudo pip install tox zipp
+          sudo pip install 'tox<3'
         env:
           VIRTUAL_ENV_DISABLE_PROMPT: "true"
       - name: Run tox tests
