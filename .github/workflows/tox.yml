@@ -31,24 +31,28 @@ jobs:
           LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
           LSR_MSCENARIOS: default
   runtox-py26:
-    runs-on: ubuntu-14.04
+    runs-on: ubuntu-16.04
     steps:
       - name: checkout PR
         uses: actions/checkout@v2
-      - name: check python version
-        run: python --version
       - name: Install platform dependencies
         run: |
           set -euxo pipefail
+          curl -sSf --retry 5 -o python-2.6.tar.bz2 ${PY26URL}
+          tar xjf python-2.6.tar.bz2 --directory /
           .travis/preinstall
+        env:
+          PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
       - name: Install pip, tox, python dependencies
         run: |
           set -euxo pipefail
+          source /home/travis/virtualenv/python2.6/bin/activate
           python -m pip install --upgrade pip
           pip install tox
       - name: Run tox tests
         run: |
           set -euxo pipefail
+          source /home/travis/virtualenv/python2.6/bin/activate
           .travis/runtox
         env:
           LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
