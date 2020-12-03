@@ -39,9 +39,10 @@ jobs:
         run: |
           set -euxo pipefail
           curl -sSf --retry 5 -o python-2.6.tar.bz2 ${PY26URL}
-          tar xjf python-2.6.tar.bz2 --directory /
+          sudo tar xjf python-2.6.tar.bz2 --directory /
           .travis/preinstall
         env:
+          # yamllint disable-line rule:line-length
           PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
       - name: Install pip, tox, python dependencies
         run: |
