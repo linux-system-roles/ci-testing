@@ -42,10 +42,10 @@ jobs:
           set -x
           python --version
           pip --version
-          lsr_travis_preinstall
           sudo pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
           configparser \
           git+https://github.com/linux-system-roles/tox-lsr@0.0.1
+          lsr_travis_preinstall
           sudo pip list
         env:
           # yamllint disable-line rule:line-length
