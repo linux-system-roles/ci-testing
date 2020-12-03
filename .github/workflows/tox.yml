@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Install platform dependencies
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           curl -sSf --retry 5 -o python-2.6.tar.bz2 ${PY26URL}
           sudo tar xjf python-2.6.tar.bz2 --directory /
           .travis/preinstall
@@ -46,15 +46,18 @@ jobs:
           PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
       - name: Install pip, tox, python dependencies
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           source /home/travis/virtualenv/python2.6/bin/activate
           python -m pip install --upgrade pip
           pip install tox
+        env:
+          PS1: '$ '
       - name: Run tox tests
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           source /home/travis/virtualenv/python2.6/bin/activate
           .travis/runtox
         env:
           LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
           LSR_MSCENARIOS: default
+          PS1: '$ '
