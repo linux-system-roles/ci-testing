@@ -48,7 +48,8 @@ jobs:
         run: |
           set -euo pipefail
           source /home/travis/virtualenv/python2.6/bin/activate
-          python -m pip install --upgrade pip
+          set -x
+          pip install --upgrade pip
           pip install tox
         env:
           VIRTUAL_ENV_DISABLE_PROMPT: "true"
@@ -56,6 +57,7 @@ jobs:
         run: |
           set -euo pipefail
           source /home/travis/virtualenv/python2.6/bin/activate
+          set -x
           .travis/runtox
         env:
           LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
