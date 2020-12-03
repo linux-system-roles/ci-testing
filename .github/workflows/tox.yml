@@ -14,19 +14,17 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.pyver }}
-      - name: Install platform dependencies
-        run: |
-          set -euxo pipefail
-          .travis/preinstall
-      - name: Install pip, tox, python dependencies
+      - name: Install platform dependencies, python, tox, tox-lsr
         run: |
           set -euxo pipefail
           python -m pip install --upgrade pip
-          pip install tox
+          pip install tox configparser \
+          git+https://github.com/linux-system-roles/tox-lsr@0.0.1
+          lsr_travis_preinstall
       - name: Run tox tests
         run: |
           set -euxo pipefail
-          .travis/runtox
+          lsr_travis_runtox
         env:
           LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
           LSR_MSCENARIOS: default
