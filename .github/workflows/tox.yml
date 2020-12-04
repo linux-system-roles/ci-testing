@@ -21,7 +21,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install git
           pip install tox configparser \
-          git+https://github.com/linux-system-roles/tox-lsr@0.0.2
+          git+https://github.com/linux-system-roles/tox-lsr@0.0.4
           lsr_travis_preinstall
       - name: Run tox tests
         run: |
@@ -51,7 +51,7 @@ jobs:
           sudo apt-get install git
           pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
           configparser \
-          git+https://github.com/linux-system-roles/tox-lsr@0.0.2
+          git+https://github.com/linux-system-roles/tox-lsr@0.0.4
           lsr_travis_preinstall
           pip list
         env:
