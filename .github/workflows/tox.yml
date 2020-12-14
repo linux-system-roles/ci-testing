@@ -1,12 +1,18 @@
+# yamllint disable rule:line-length
 name: tox
 on:  # yamllint disable-line rule:truthy
   - pull_request
+env:
+  TOX_LSR: "git+https://github.com/richm/tox-lsr@gha-test"
+  LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
+  LSR_MSCENARIOS: default
+  #LSR_EXTRA_PACKAGES: "libdbus-1-dev libgirepository1.0-dev python3-dev"
 jobs:
   python:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        pyver: ['2.7', '3.6', '3.7', '3.8', '3.9']
+        pyver: ['2.7', '3.6', '3.7', '3.8']
     steps:
       - name: checkout PR
         uses: actions/checkout@v2
@@ -20,51 +26,51 @@ jobs:
           python -m pip install --upgrade pip
           sudo apt-get update
           sudo apt-get install git
-          pip install tox configparser \
-          git+https://github.com/linux-system-roles/tox-lsr@0.0.4
-          lsr_travis_preinstall
+          pip install $TOX_LSR_DEPS "$TOX_LSR"
+          lsr_ci_preinstall
       - name: Run tox tests
         run: |
           set -euxo pipefail
-          tox -vv
-        env:
-          LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
-          LSR_MSCENARIOS: default
+          toxpyver=$(echo "${{ matrix.pyver }}" | tr -d .)
+          toxenvs="py${toxpyver}"
+          case "$toxpyver" in
+          27) toxenvs="${toxenvs},coveralls,flake8,pylint,custom" ;;
+          36) toxenvs="${toxenvs},coveralls,black,yamllint,shellcheck,custom,collection" ;;
+          37) toxenvs="${toxenvs},coveralls,custom" ;;
+          38) toxenvs="${toxenvs},coveralls,custom" ;;
+          esac
+          TOXENV="$toxenvs" lsr_ci_runtox
   python-26:
     runs-on: ubuntu-16.04
+    env:
+      PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
+      PY26TARFILE: "python-2.6.tar.bz2"
+      PY26VENVPATH: "/home/travis/virtualenv/python2.6"
+      VIRTUAL_ENV_DISABLE_PROMPT: "true"
     steps:
       - name: checkout PR
         uses: actions/checkout@v2
       - name: Install python, dependencies
         run: |
           set -euo pipefail
-          curl -sSf --retry 5 -o python-2.6.tar.bz2 ${PY26URL}
-          sudo tar xjf python-2.6.tar.bz2 --directory /
+          curl -sSf --retry 5 -o "$PY26TARFILE" "$PY26URL"
+          sudo tar xjf "$PY26TARFILE" --directory /
           myuid=$(id -u)
           mygid=$(id -g)
-          sudo chown -R $myuid:$mygid /home/travis/virtualenv
-          source /home/travis/virtualenv/python2.6/bin/activate
+          sudo chown -R $myuid:$mygid "$PY26VENVPATH"
+          source "$PY26VENVPATH/bin/activate"
           set -x
           python --version
           pip --version
           sudo apt-get update
           sudo apt-get install git
           pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
-          configparser \
-          git+https://github.com/linux-system-roles/tox-lsr@0.0.4
-          lsr_travis_preinstall
+          $TOX_LSR_DEPS "$TOX_LSR"
+          lsr_ci_preinstall
           pip list
-        env:
-          # yamllint disable-line rule:line-length
-          PY26URL: https://storage.googleapis.com/travis-ci-language-archives/python/binaries/ubuntu/14.04/x86_64/python-2.6.tar.bz2
-          VIRTUAL_ENV_DISABLE_PROMPT: "true"
       - name: Run tox tests
         run: |
           set -euo pipefail
-          source /home/travis/virtualenv/python2.6/bin/activate
+          source "$PY26VENVPATH/bin/activate"
           set -x
           tox -e py26,coveralls,custom
-        env:
-          LSR_ANSIBLES: 'ansible==2.7.* ansible==2.8.* ansible==2.9.*'
-          LSR_MSCENARIOS: default
-          VIRTUAL_ENV_DISABLE_PROMPT: "true"
