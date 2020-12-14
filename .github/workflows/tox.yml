@@ -57,7 +57,7 @@ jobs:
           sudo tar xjf "$PY26TARFILE" --directory /
           myuid=$(id -u)
           mygid=$(id -g)
-          sudo chown -R $myuid:$mygid "$PY26VENVPATH"
+          sudo chown -H -R $myuid:$mygid "$PY26VENVPATH"
           source "$PY26VENVPATH/bin/activate"
           set -x
           python --version
