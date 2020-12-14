@@ -13,7 +13,7 @@ platforms:
     image: registry.centos.org/centos/centos:6
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    command: /usr/sbin/init
+    command: /sbin/init
     privileged: true
     pre_build_image: true
   - name: centos-7
