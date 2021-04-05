@@ -76,12 +76,11 @@ jobs:
           tox -e py26,coveralls,custom
   python-26-cntnr:
     runs-on: ubuntu-latest
-    container:
-      image: registry.centos.org/centos:6
     steps:
       - name: checkout PR
         uses: actions/checkout@v2
       - name: Install python, dependencies
+        uses: docker://registry.centos.org/centos:6
         run: |
           set -euxo pipefail
           python --version
@@ -92,6 +91,7 @@ jobs:
           lsr_ci_preinstall
           pip list
       - name: Run tox tests
+        uses: docker://registry.centos.org/centos:6
         run: |
           set -euxo pipefail
           tox -e py26,coveralls,custom
