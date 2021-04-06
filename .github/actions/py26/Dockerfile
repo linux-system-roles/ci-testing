@@ -8,7 +8,5 @@ RUN set -euo pipefail; \
                -e 's,mirror.centos.org/centos/$releasever,vault.centos.org/6.10,' \
                "$file"; \
       fi; \
-    done; \
-    yum -y install epel-release libffi-devel openssl-devel dbus-devel python-devel gcc git; \
-    yum -y install python-pip
+    done
 ENTRYPOINT ["/entrypoint.sh"]

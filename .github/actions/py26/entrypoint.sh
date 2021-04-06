@@ -4,6 +4,8 @@ set -euxo pipefail
 
 exec 2>&1
 
+yum -y install epel-release libffi-devel openssl-devel dbus-devel python-devel gcc git
+yum -y install python-pip
 if [ -n "${LSR_EXTRA_PACKAGES_YUM:-}" ]; then
   yum install -y $LSR_EXTRA_PACKAGES_YUM
 fi
