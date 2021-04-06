@@ -13,6 +13,8 @@ done
 
 yum install -y epel-release git
 yum install -y python-pip
+id -a
+env
 pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
 lsr_ci_preinstall
 tox -e py26,coveralls,custom
