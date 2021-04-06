@@ -23,5 +23,5 @@ ls -alrtF $HOME
 echo more
 ls -alrtF $HOME/.cache $HOME/.cache/pip || :
 mkdir -p $HOME/.cache/pip/http
-pip -vv install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
+pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' 'py<1.5' "$TOX_LSR"
 tox -e py26,coveralls,custom
