@@ -79,19 +79,5 @@ jobs:
     steps:
       - name: checkout PR
         uses: actions/checkout@v2
-      - name: Install python, dependencies
-        uses: docker://registry.centos.org/centos:6
-        run: |
-          set -euxo pipefail
-          python --version
-          pip --version
-          sudo yum -y install git
-          pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' \
-          "$TOX_LSR"
-          lsr_ci_preinstall
-          pip list
-      - name: Run tox tests
-        uses: docker://registry.centos.org/centos:6
-        run: |
-          set -euxo pipefail
-          tox -e py26,coveralls,custom
+      - name: Run LSR py26 job
+        uses: ./.github/actions/py26

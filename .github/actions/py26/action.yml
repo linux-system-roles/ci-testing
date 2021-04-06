@@ -1,0 +1,5 @@
+name: 'py26'
+description: 'Run unit tests on python 2.6'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
