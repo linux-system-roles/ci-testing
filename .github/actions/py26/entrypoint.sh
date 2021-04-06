@@ -11,7 +11,7 @@ for file in /etc/yum.repos.d/CentOS-*.repo; do
   fi
 done
 
-yum install -y epel-release
+yum install -y epel-release git
 yum install -y python-pip
 pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
 lsr_ci_preinstall
