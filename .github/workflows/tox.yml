@@ -46,4 +46,4 @@ jobs:
       - name: checkout PR
         uses: actions/checkout@v2
       - name: Run LSR py26 action
-        uses: linux-system-roles/lsr-gh-action-py26@main
+        uses: linux-system-roles/lsr-gh-action-py26@1.0.0
