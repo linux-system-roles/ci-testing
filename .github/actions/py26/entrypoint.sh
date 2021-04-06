@@ -20,6 +20,6 @@ ls -alrtF $HOME
 pip install --upgrade pip
 echo more
 ls -alrtF $HOME/.cache $HOME/.cache/pip || :
-ip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
+pip install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
 lsr_ci_preinstall
 tox -e py26,coveralls,custom
