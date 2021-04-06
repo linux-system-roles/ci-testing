@@ -13,7 +13,9 @@ for file in /etc/yum.repos.d/CentOS-*.repo; do
   fi
 done
 
-yum install -y epel-release git
+LSR_EXTRA_PACKAGES_YUM="${LSR_EXTRA_PACKAGES_YUM:-} libffi-devel openssl-devel dbus-devel python-devel"
+
+yum install -y epel-release git $LSR_EXTRA_PACKAGES_YUM
 yum install -y python-pip
 echo home
 ls -alrtF $HOME
@@ -22,5 +24,4 @@ echo more
 ls -alrtF $HOME/.cache $HOME/.cache/pip || :
 mkdir -p $HOME/.cache/pip/http
 pip -vv install 'tox<3' 'virtualenv==15.*' 'pluggy==0.5.*' "$TOX_LSR"
-lsr_ci_preinstall
 tox -e py26,coveralls,custom
