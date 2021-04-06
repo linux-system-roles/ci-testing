@@ -2,6 +2,8 @@
 
 set -euxo pipefail
 
+exec 2>&1
+
 for file in /etc/yum.repos.d/CentOS-*.repo; do
   if ! grep '^baseurl=.*vault[.]centos[.]org' "$file"; then
     sed -i -e 's,^mirrorlist,#mirrorlist,' \
