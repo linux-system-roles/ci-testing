@@ -1,0 +1,23 @@
+# yamllint disable rule:line-length
+name: tox
+on:  # yamllint disable-line rule:truthy
+  - pull_request
+jobs:
+  find-ansible-plugins:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout PR
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+      - name: Install ansible, jinja2
+        run: |
+          set -euxo pipefail
+          pip install "ansible==4.*" "jinja2==2.7.*"
+          curl -L -o report-modules-plugins.py https://raw.githubusercontent.com/richm/auto-maintenance/report-modules-plugins/report-modules-plugins.py
+      - name: Scan Ansible code
+        run: |
+          set -euxo pipefail
+          python report-modules-plugins.py $(pwd)
