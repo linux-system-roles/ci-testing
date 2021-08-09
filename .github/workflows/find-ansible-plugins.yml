@@ -20,4 +20,5 @@ jobs:
       - name: Scan Ansible code
         run: |
           set -euo pipefail
+          env
           python report-modules-plugins.py $(pwd)
