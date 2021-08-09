@@ -24,6 +24,24 @@ jobs:
           check_suite_url=$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" | jq -r '.check_suite_url')
           check_run_id=$(gh api "$check_suite_url/check-runs" | jq '.check_runs[] | select(.name=="find-ansible-plugins") | .id ')
           gh api "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}" | jq .
+          gh api --method PATCH "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}/annotations" --field @- <<EOF
+          {
+            "output": {
+              "title": "This is the title",
+              "summary": "This is the summary",
+              "text": "This is the text",
+              "annotations": [
+                {
+                  "path": "tasks/main.yml",
+                  "start_line": 30,
+                  "end_line": 31,
+                  "annotation_level": "warning",
+                  "message": "This is the message"
+                }
+              ]
+            }
+          }
+          EOF
           python report-modules-plugins.py $(pwd)
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
