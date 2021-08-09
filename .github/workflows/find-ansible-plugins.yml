@@ -24,7 +24,7 @@ jobs:
           check_suite_url=$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" | jq -r '.check_suite_url')
           check_run_id=$(gh api "$check_suite_url/check-runs" | jq '.check_runs[] | select(.name=="find-ansible-plugins") | .id ')
           #gh api "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}" | jq .
-          gh api -X PATCH "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}/annotations" -F @- <<EOF
+          gh api -X PATCH "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}/annotations" --input -<<EOF
           {
             "output": {
               "title": "This is the title",
