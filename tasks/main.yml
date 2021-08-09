@@ -33,6 +33,10 @@
   debug:
     msg: json_query {{ ansible_facts | json_query('name') }}
 
+- name: use lookup
+  debug:
+    msg: env {{ lookup('env', 'FOO') }}
+
 - name: Ensure required services are enabled and started
   service:
     name: "{{ item }}"
