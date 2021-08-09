@@ -19,5 +19,5 @@ jobs:
           curl -L -o report-modules-plugins.py https://raw.githubusercontent.com/richm/auto-maintenance/report-modules-plugins/report-modules-plugins.py
       - name: Scan Ansible code
         run: |
-          set -euxo pipefail
+          set -euo pipefail
           python report-modules-plugins.py $(pwd)
