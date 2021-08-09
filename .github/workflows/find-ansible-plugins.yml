@@ -20,11 +20,11 @@ jobs:
       - name: Scan Ansible code
         run: |
           set -euo pipefail
-          env
+          #env
           check_suite_url=$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" | jq -r '.check_suite_url')
           check_run_id=$(gh api "$check_suite_url/check-runs" | jq '.check_runs[] | select(.name=="find-ansible-plugins") | .id ')
-          gh api "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}" | jq .
-          gh api --method PATCH "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}/annotations" --field @- <<EOF
+          #gh api "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}" | jq .
+          gh api -X PATCH "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}/annotations" -F @- <<EOF
           {
             "output": {
               "title": "This is the title",
