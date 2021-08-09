@@ -21,9 +21,9 @@ jobs:
         run: |
           set -euo pipefail
           env
-          python report-modules-plugins.py $(pwd)
           check_suite_url=$(gh api "/repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" | jq -r '.check_suite_url')
           check_run_id=$(gh api "$check_suite_url/check-runs" | jq '.check_runs[] | select(.name=="find-ansible-plugins") | .id ')
           gh api "/repos/${GITHUB_REPOSITORY}/check-runs/${check_run_id}" | jq .
+          python report-modules-plugins.py $(pwd)
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
