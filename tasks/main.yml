@@ -14,35 +14,78 @@
     - "default.yml"
 
 # Examples of some tasks:
-- name: Ensure required packages are installed
-  package:
-    name: "{{ __template_packages }}"
+
+- name: Deploy the GPG key for Microsoft repositories
+  rpm_key:
+    key: https://packages.microsoft.com/keys/microsoft.asc
     state: present
 
-- name: use crypttab
-  crypttab:
+- name: Configure the RHEL 8 Microsoft SQL Server 2019 repository
+  yum_repository:
+    name: packages-microsoft-com-mssql-server-2019
+    description: Microsoft SQL Server 2019
+    baseurl: https://packages.microsoft.com/rhel/8/mssql-server-2019/
+    gpgcheck: true
 
-- name: use firewalld
-  firewalld:
+- name: Print time before the first package install
+  command: date +"%Y-%m-%d %H:%M:%S"
+  register: __time1
 
-- name: use ipaddr
-  debug:
-    msg: ipaddr {{ '127.0.0.1' | ipaddr }}
+- name: Install the mssql_server package using the proxy
+  package:
+    name: mssql-server
+    state: present
 
-- name: use json_query
-  debug:
-    msg: json_query {{ ansible_facts | json_query('name') }}
+- name: Print time after the first package install
+  command: date +"%Y-%m-%d %H:%M:%S"
+  register: __time2
 
-- name: Ensure required services are enabled and started
-  service:
-    name: "{{ item }}"
-    state: started
-    enabled: yes
-  loop: "{{ __template_services }}"
+- name: Remove the mssql_server package
+  package:
+    name: mssql-server
+    state: absent
 
-- name: Generate /etc/{{ __template_foo_config }}
-  template:
-    src: "{{ __template_foo_config }}.j2"
-    dest: /etc/{{ __template_foo_config }}
-    backup: yes
-  notify: template handler to restart services
+- name: Clean packages cache
+  command: yum clean packages
+
+- name: Remove dnf proxy for EL > 6 and Fedora
+  blockinfile:
+    path: /etc/dnf/dnf.conf
+    block: |
+      proxy=http://10.0.104.121:3128
+      sslverify=False
+    state: absent
+  when:
+    - ansible_distribution_major_version | int > 6
+    - ansible_distribution in ['CentOS','RedHat','Fedora']
+
+- name: Remove yum proxy for EL 6
+  blockinfile:
+    path: /etc/yum.conf
+    block: |
+      proxy=http://10.0.104.121:3128
+      sslverify=False
+    state: absent
+  when:
+    - ansible_distribution_major_version == 6
+    - ansible_distribution in ['CentOS','RedHat','Fedora']
+
+- name: Print time before the second package install
+  command: date +"%Y-%m-%d %H:%M:%S"
+  register: __time3
+
+- name: Install the mssql_server package without the proxy
+  package:
+    name: mssql-server
+    state: present
+
+- name: Print time after the second package install
+  command: date +"%Y-%m-%d %H:%M:%S"
+  register: __time4
+
+- debug:
+    msg: >-
+      It takes {{ __time2.stdout | to_datetime - __time1.stdout | to_datetime }}
+      to install mssql_server via the proxy and
+      {{ __time4.stdout | to_datetime - __time3.stdout | to_datetime }} to
+      install the package without the proxy.
