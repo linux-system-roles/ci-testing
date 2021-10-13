@@ -27,23 +27,21 @@
     baseurl: https://packages.microsoft.com/rhel/8/mssql-server-2019/
     gpgcheck: true
 
-- name: Print time before the first package install
+- name: Print time before the first package download
   command: date +"%Y-%m-%d %H:%M:%S"
   register: __time1
+  changed_when: false
 
-- name: Install the mssql_server package using the proxy
+- name: Download the mssql_server package via the proxy
   package:
     name: mssql-server
     state: present
+    download_only: true
 
-- name: Print time after the first package install
+- name: Print time after the first package download
   command: date +"%Y-%m-%d %H:%M:%S"
   register: __time2
-
-- name: Remove the mssql_server package
-  package:
-    name: mssql-server
-    state: absent
+  changed_when: false
 
 - name: Clean packages cache
   command: yum clean packages
@@ -70,22 +68,33 @@
     - ansible_distribution_major_version == 6
     - ansible_distribution in ['CentOS','RedHat','Fedora']
 
-- name: Print time before the second package install
+- name: Print time before the second package download
   command: date +"%Y-%m-%d %H:%M:%S"
   register: __time3
+  changed_when: false
 
-- name: Install the mssql_server package without the proxy
+- name: Download the mssql_server package without the proxy
   package:
     name: mssql-server
     state: present
+    download_only: true
 
-- name: Print time after the second package install
+- name: Print time after the second package download
   command: date +"%Y-%m-%d %H:%M:%S"
   register: __time4
+  changed_when: false
 
-- debug:
-    msg: >-
-      It takes {{ __time2.stdout | to_datetime - __time1.stdout | to_datetime }}
-      to install mssql_server via the proxy and
-      {{ __time4.stdout | to_datetime - __time3.stdout | to_datetime }} to
-      install the package without the proxy.
+- name: Print results
+  vars:
+    __time_proxy: >-
+      {{ __time2.stdout | to_datetime - __time1.stdout | to_datetime }}
+    __time_no_proxy: >-
+      {{ __time4.stdout | to_datetime - __time3.stdout | to_datetime }}
+  debug:
+    msg:
+      - Downloading via the proxy takes     {{ __time_proxy }}
+      - Downloading without the proxy takes {{ __time_no_proxy }}
+      - >-
+        Proxy saves
+        {{ __time_no_proxy  | to_datetime('%H:%M:%S') -
+        __time_proxy | to_datetime('%H:%M:%S') }}
