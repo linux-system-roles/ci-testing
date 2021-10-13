@@ -46,27 +46,43 @@
 - name: Clean packages cache
   command: yum clean packages
 
-- name: Remove dnf proxy for EL > 6 and Fedora
+- name: Register dnf.conf
+  stat:
+    path: /etc/dnf/dnf.conf
+  register: dnf_conf
+
+- name: Register yum.conf
+  stat:
+    path: /etc/yum.conf
+  register: yum_conf
+
+- name: Print dnf.conf
+  command: cat /etc/dnf/dnf.conf
+  when: dnf_conf.stat.exists | bool
+  changed_when: false
+
+- name: Remove dnf proxy
   blockinfile:
     path: /etc/dnf/dnf.conf
     block: |
       proxy=http://10.0.104.121:3128
       sslverify=False
     state: absent
-  when:
-    - ansible_distribution_major_version | int > 6
-    - ansible_distribution in ['CentOS','RedHat','Fedora']
+  when: dnf_conf.stat.exists | bool
 
-- name: Remove yum proxy for EL 6
+- name: Print yum.conf
+  command: cat /etc/yum.conf
+  when: yum_conf.stat.exists | bool
+  changed_when: false
+
+- name: Remove yum proxy
   blockinfile:
     path: /etc/yum.conf
     block: |
       proxy=http://10.0.104.121:3128
       sslverify=False
     state: absent
-  when:
-    - ansible_distribution_major_version == 6
-    - ansible_distribution in ['CentOS','RedHat','Fedora']
+  when: yum_conf.stat.exists | bool
 
 - name: Print time before the second package download
   command: date +"%Y-%m-%d %H:%M:%S"
