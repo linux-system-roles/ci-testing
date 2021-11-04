@@ -62,8 +62,8 @@
       {{ '/etc/dnf/dnf.conf' if dnf_conf.stat.exists else
       '/etc/yum.conf' }}
     block: |
-      proxy=http://10.0.104.121:3128
-      sslverify=False
+      proxy = http://10.0.104.121:3128
+      sslverify = False
     state: absent
 
 - name: Print dnf.conf or yum.conf
