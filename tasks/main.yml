@@ -13,6 +13,11 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
-# Examples of some tasks:
+
+- name: Update all packages
+  package:
+    name: "*"
+    state: latest
+
 - name: Gather service facts
   service_facts:
