@@ -13,6 +13,12 @@
     - "{{ ansible_os_family }}.yml"
     - "default.yml"
 
+- name: Print Ansible version
+  command: ansible --version
+  delegate_to: localhost
+
+- name: Print systemd version
+  command: rpm -q systemd
 
 - name: Update all packages
   package:
