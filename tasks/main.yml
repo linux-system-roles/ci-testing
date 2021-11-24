@@ -20,10 +20,5 @@
 - name: Print systemd version
   command: rpm -q systemd
 
-- name: Update all packages
-  package:
-    name: "*"
-    state: latest
-
 - name: Gather service facts
   service_facts:
