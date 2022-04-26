@@ -5,33 +5,13 @@
 # An example of how to set distribution and version specific internal variables
 # (defined in vars/ directory):
 - name: Set version specific variables
-  include_vars: "{{ item }}"
-  with_first_found:
-    - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
-    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-    - "{{ ansible_distribution }}.yml"
-    - "{{ ansible_os_family }}.yml"
-    - "default.yml"
+  include_tasks: set_vars.yml
 
 # Examples of some tasks:
 - name: Ensure required packages are installed
   package:
     name: "{{ __template_packages }}"
     state: present
-
-- name: use crypttab
-  crypttab:
-
-- name: use firewalld
-  firewalld:
-
-- name: use ipaddr
-  debug:
-    msg: ipaddr {{ '127.0.0.1' | ipaddr }}
-
-- name: use json_query
-  debug:
-    msg: json_query {{ ansible_facts | json_query('name') }}
 
 - name: Ensure required services are enabled and started
   service:
