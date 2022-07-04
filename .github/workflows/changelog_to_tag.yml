@@ -32,6 +32,7 @@ jobs:
               fi
           done > ./.tagmsg.txt
           _tagname=$( grep -m 1 "[0-9]*\.[0-9]*\.[0-9]*" CHANGELOG.md | sed -e "s/^.*\[\([0-9]*\.[0-9]*\.[0-9]*\)\].*/\1/" )
+          git fetch --all --tags
           for t in $( git tag -l ); do
               echo INFO: $t vs "$_tagname"
               if [[ $t == "$_tagname" ]]; then
