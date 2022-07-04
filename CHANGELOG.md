@@ -4,6 +4,20 @@ Changelog
 [1.1.2] - 2022-07-03
 --------------------
 
+ ### New features
+
+ - add some mods
+ - Add CHANGELOG.md
+ - Add changelog_to_tag.yml to .github/workflows
+ - Test commit - update README.md
+
+ ### Bug fixes
+
+ - Fix tag handling in .github/workflows/changelog_to_tag.yml.
+
+[1.1.2] - 2022-07-03
+--------------------
+
 ### New features
 
 - add some mods
