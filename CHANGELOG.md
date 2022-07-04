@@ -1,6 +1,15 @@
 Changelog
 =========
 
+[1.1.2] - 2022-07-03
+--------------------
+
+### New features
+
+- add some mods
+- Add CHANGELOG.md
+- Add changelog_to_tag.yml to .github/workflows
+
 [1.1.1] - 2021-08-09
 --------------------
 
