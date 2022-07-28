@@ -1,3 +1,5 @@
 summary: Basic smoke test
 execute:
-    script: tmt --help
+    script: |
+        ls -alrtF
+        cat /etc/os-release 
