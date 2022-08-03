@@ -1,5 +1,5 @@
 name: Schedule test on Testing Farm
-on:
+on:  # yamllint disable-line rule:truthy
   issue_comment:
     types:
       - created
@@ -12,7 +12,8 @@ jobs:
     if: |
       github.event.issue.pull_request
       && contains(github.event.comment.body, '[test]')
-      && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+      && contains(fromJson('["OWNER", "MEMBER"]'),
+         github.event.comment.author_association)
     steps:
       - name: Checkout repo and switch to corresponding pull request
         uses: actions/checkout@v2
