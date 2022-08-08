@@ -5,3 +5,4 @@
 
   roles:
     - linux-system-roles.ci-testing
+  gather_facts: false

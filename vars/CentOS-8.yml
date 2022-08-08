@@ -3,5 +3,5 @@
 # Put internal variables here with values for unrecognized distributions.
 
 # Example:
-__template_packages: []
+__template_packages: [python3]
 __template_services: []
