@@ -2,9 +2,9 @@
   vars:
     tox_lsr: "git+https://github.com/linux-system-roles/tox-lsr@main"
   tasks:
-    - name: Install tox, pip
+    - name: Install requirements
       package:
-        name: [python-tox, python-pip]
+        name: [python-tox, python-pip, git]
 
     - name: Install tox-lsr
       pip:
