@@ -3,3 +3,4 @@ execute:
     script: |
         ls -alrtF
         cat /etc/os-release 
+        tox -e container-ansible-core-2.13

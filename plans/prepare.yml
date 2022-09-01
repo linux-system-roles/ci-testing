@@ -1,0 +1,11 @@
+- hosts: all
+  vars:
+    tox_lsr: "git+https://github.com/linux-system-roles/tox-lsr@main"
+  tasks:
+    - name: Install tox, pip
+      package:
+        name: [python-tox, python-pip]
+
+    - name: Install tox-lsr
+      pip:
+        name: "{{ tox_lsr }}"
