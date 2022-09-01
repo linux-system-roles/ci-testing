@@ -1,6 +1,10 @@
 summary: Basic smoke test
+prepare:
+  how: ansible
+  playbook:
+  - plans/prepare.yml
 execute:
-    script: |
-        ls -alrtF
-        cat /etc/os-release 
-        tox -e container-ansible-core-2.13
+  script: |
+    ls -alrtF
+    cat /etc/os-release
+    tox -e container-ansible-core-2.13

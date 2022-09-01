@@ -5,7 +5,3 @@ jobs:
   targets:
   - fedora-latest-stable
   - epel-7
-  prepare:
-    how: ansible
-    playbook:
-    - plans/prepare.yml
