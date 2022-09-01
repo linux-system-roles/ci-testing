@@ -9,4 +9,5 @@ execute:
     cat /etc/os-release
     rpm -qa|grep -i pip
     rpm -qa|grep -i tox
+    pip list
     tox -e container-ansible-core-2.13
