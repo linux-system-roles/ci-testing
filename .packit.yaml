@@ -4,4 +4,4 @@ jobs:
   trigger: pull_request
   targets:
   - fedora-latest-stable
-  - epel-7
+  - epel-8

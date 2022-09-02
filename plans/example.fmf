@@ -1,14 +1,12 @@
 summary: Basic smoke test
-#prepare:
-#  how: ansible
-#  playbook:
-#  - plans/prepare.yml
+prepare:
+  how: ansible
+  playbook:
+  - plans/prepare.yml
 execute:
   script: |
     ls -alrtF
     cat /etc/os-release
-    yum repolist
-    yum -y install python3-pip
     rpm -qa|grep -i pip
     rpm -qa|grep -i tox
     pip list

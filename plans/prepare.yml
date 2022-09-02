@@ -4,7 +4,7 @@
   tasks:
     - name: Install requirements
       package:
-        name: [python3-tox, python3-pip, git]
+        name: [python3-tox, python3-pip, git, podman]
 
     - name: Install tox-lsr
       pip:
