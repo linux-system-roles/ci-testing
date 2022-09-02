@@ -1,4 +1,7 @@
 summary: Basic smoke test
+provision:
+  - name: server
+  - name: client
 prepare:
   how: ansible
   playbook:
