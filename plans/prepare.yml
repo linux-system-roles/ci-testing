@@ -9,3 +9,8 @@
     - name: Install tox-lsr
       pip:
         name: "{{ tox_lsr }}"
+
+    - name: Install config file
+      get_url:
+        url: https://raw.githubusercontent.com/linux-system-roles/linux-system-roles.github.io/master/download/linux-system-roles.json
+        dest: /root/.config/linux-system-roles.json
