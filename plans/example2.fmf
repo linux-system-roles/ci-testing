@@ -7,7 +7,7 @@ execute:
   script: |
     ls -alrtF
     cat /etc/os-release
-    rpm -qa|grep -i pip
-    rpm -qa|grep -i tox
-    pip list
-    yum -y search ansible-core
+    rpm -qa|grep -i pip || :
+    rpm -qa|grep -i tox || :
+    pip list || :
+    yum -y search ansible-core || :
