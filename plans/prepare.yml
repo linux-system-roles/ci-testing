@@ -1,11 +1,5 @@
 - hosts: all
-  vars:
-    tox_lsr: "git+https://github.com/linux-system-roles/tox-lsr@main"
   tasks:
     - name: Install requirements
       package:
-        name: [python3-tox, python3-pip, git, ansible]
-
-    - name: Install tox-lsr
-      pip:
-        name: "{{ tox_lsr }}"
+        name: [git, ansible]
