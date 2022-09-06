@@ -5,7 +5,5 @@ prepare:
   - plans/prepare.yml
 execute:
   script: |
-    ls -alrtF
-    cat /etc/os-release
-    rpm -qa | grep ansible
-    ansible --version
+    . /tmp/.venv/bin/activate
+    ansible -c local -i localhost, all -m setup -a "gather_subset=!all filter=ansible_distribution*"
