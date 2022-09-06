@@ -2,7 +2,7 @@
   tasks:
     - name: Install requirements
       package:
-        name: [git, python3-pip]
+        name: [git, python3-pip, python3-virtualenv, python3-setuptools]
     - name: ansible 2.9 in venv
       pip:
         name: ansible==2.9.*
