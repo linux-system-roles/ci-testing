@@ -6,4 +6,5 @@ prepare:
 execute:
   script: |
     . /tmp/.venv/bin/activate
-    ansible -c local -i localhost, all -m setup -a "gather_subset=!all filter=ansible_distribution*"
+    ansible --version
+    ansible -c local -i localhost, all -m setup -a "gather_subset=min filter=ansible_distribution*"
