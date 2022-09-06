@@ -10,4 +10,4 @@ execute:
     rpm -qa|grep -i pip
     rpm -qa|grep -i tox
     pip list
-    tox -e container-ansible-core-2.13 -- --image-name centos-9 tests/tests_default.yml
+    yum -y search ansible-core

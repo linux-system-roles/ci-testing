@@ -4,18 +4,8 @@
   tasks:
     - name: Install requirements
       package:
-        name: [python3-tox, python3-pip, git, podman]
+        name: [python3-tox, python3-pip, git, ansible]
 
     - name: Install tox-lsr
       pip:
         name: "{{ tox_lsr }}"
-
-    - name: Ensure config directory
-      file:
-        path: /root/.config
-        state: directory
-
-    - name: Install config file
-      get_url:
-        url: https://raw.githubusercontent.com/linux-system-roles/linux-system-roles.github.io/master/download/linux-system-roles.json
-        dest: /root/.config/linux-system-roles.json
