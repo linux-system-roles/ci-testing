@@ -3,7 +3,7 @@ environment:
   LSR_TEST_PB: tests_example2.yml
   ANSIBLE_VENV: /tmp/.venv
 prepare:
-  - how: script
+  - how: shell
     script: |
       curl -o /tmp/run_test_pb_localhost.sh https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_scripts/run_test_pb_localhost.sh
   - how: ansible
