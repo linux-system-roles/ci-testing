@@ -3,21 +3,14 @@ environment:
   LSR_TEST_PB: tests_example1.yml
   ANSIBLE_VENV: /tmp/.venv
 prepare:
-  - name: a
-    how: shell
-    order: 99
-    script: |
-      set -euxo pipefail
-      curl -o /tmp/run_test_pb_localhost.sh https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_scripts/run_test_pb_localhost.sh
-      curl -o /tmp/prepare_localhost.yml https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
-  - name: b
-    how: ansible
-    order: 1
-    playbook:
-      - /tmp/prepare_localhost.yml
+  how: ansible
+  playbook:
+    - https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
 execute:
   script: |
     . "$ANSIBLE_VENV/bin/activate"
+    set -euxo pipefail
     ansible --version
     ansible -c local -i localhost, all -m setup -a "gather_subset=min filter=ansible_distribution*"
+    curl -o /tmp/run_test_pb_localhost.sh https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_scripts/run_test_pb_localhost.sh
     bash /tmp/run_test_pb_localhost.sh
