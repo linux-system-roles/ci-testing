@@ -6,12 +6,10 @@ prepare:
   - how: shell
     order: 10
     script: |
+      set -euxo pipefail
       curl -o /tmp/run_test_pb_localhost.sh https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_scripts/run_test_pb_localhost.sh
       curl -o /tmp/prepare_localhost.yml https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
-  - how: ansible
-    order: 50
-    playbook:
-    - /tmp/prepare_localhost.yml
+      ansible-playbook -vv -c local -i localhost, /tmp/prepare_localhost.yml
 execute:
   script: |
     . "$ANSIBLE_VENV/bin/activate"
