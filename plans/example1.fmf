@@ -2,6 +2,7 @@ summary: Basic smoke test 1
 environment:
   LSR_TEST_PB: tests_example1.yml
   ANSIBLE_VENV: /tmp/.venv
+  USE_COLLECTION: "true"
 prepare:
   - how: install
     package: [ansible]
