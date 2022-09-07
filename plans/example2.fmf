@@ -5,14 +5,14 @@ environment:
 prepare:
   - name: a
     how: shell
-    order: 1
+    order: 99
     script: |
       set -euxo pipefail
       curl -o /tmp/run_test_pb_localhost.sh https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_scripts/run_test_pb_localhost.sh
       curl -o /tmp/prepare_localhost.yml https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
   - name: b
     how: ansible
-    order: 99
+    order: 1
     playbook:
       - /tmp/prepare_localhost.yml
 execute:
