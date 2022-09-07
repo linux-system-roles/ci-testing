@@ -3,9 +3,13 @@ environment:
   LSR_TEST_PB: tests_example2.yml
   ANSIBLE_VENV: /tmp/.venv
 prepare:
-  how: ansible
-  playbook:
-    - https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
+  - how: install
+    package: [ansible]
+  - how: shell
+    script: |
+      set -euxo pipefail
+      curl -o /tmp/prepare_localhost.yml https://raw.githubusercontent.com/richm/tox-lsr/basic-smoke-test/src/tox_lsr/test_playbooks/prepare_localhost.yml
+      ansible-playbook -vv -c local -i localhost, /tmp/prepare_localhost.yml
 execute:
   script: |
     . "$ANSIBLE_VENV/bin/activate"
