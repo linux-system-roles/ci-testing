@@ -3,5 +3,6 @@ jobs:
   skip_build: true
   trigger: pull_request
   targets:
-  - fedora-all
-  - epel-all
+  - fedora-latest-stable
+  - epel-7
+  - epel-8
