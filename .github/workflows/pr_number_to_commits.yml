@@ -1,0 +1,44 @@
+name: Append PR number to commits titles
+on:  # yamllint disable-line rule:truthy
+  merge_group:
+    branches:
+      - main
+    types:
+      - checks_requested
+permissions:
+  contents: read
+jobs:
+  commit-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Write a script to append a PR number to a commit
+        run: >-
+          echo '#!/bin/bash
+commit_file=.commit_message.txt
+commit_title=$(git log --pretty=format:"%s" -1)
+if [[ ! $commit_title =~ .*\#"$PR_NUMBER" ]]; then
+    git log --pretty=format:"%s #"$PR_NUMBER"%n%n%b" -1 > $commit_file
+    git commit --amend --allow-empty -F $commit_file
+fi
+rm -f $commit_file' > pr_number_to_commit.sh
+
+      - name: Append PR title to commits
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: >-
+          git -c sequence.editor=: rebase -i origin/main -x 'sh pr_number_to_commit.sh'
+          git push
+
+      - name: Print branch
+        run: echo ${{ github.ref }}
+
+      # - name: Force push rebased commits to the merging branch
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
+      #     force: true
