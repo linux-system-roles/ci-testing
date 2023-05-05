@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
 
       - name: Write a script to append a PR number to a commit
-        run: >-
+        run: |-
           echo '#!/bin/bash
 commit_file=.commit_message.txt
 commit_title=$(git log --pretty=format:"%s" -1)
