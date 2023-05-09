@@ -1,8 +1,7 @@
 name: Append PR number to commits titles
 on:  # yamllint disable-line rule:truthy
+  pull_request:
   merge_group:
-    branches:
-      - main
 permissions:
   contents: read
 jobs:
