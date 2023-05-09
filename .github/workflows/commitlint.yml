@@ -34,8 +34,6 @@ jobs:
           --to '${{ github.event.pull_request.head.sha }}' --verbose
 
       - name: Run commitlint on PR title
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
         run: >-
-          echo "$PR_TITLE" |
+          echo '${{ github.event.pull_request.title }}' |
           npx commitlint --verbose

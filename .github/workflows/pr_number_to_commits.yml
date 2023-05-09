@@ -15,42 +15,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Print the GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
-      # - name: Get a pull request
-      #   id: myRequest
-      #   uses: fjogeleit/http-request-action@v1
-      #   with:
-      #     url: 'https://api.github.com/repos/linux-system-roles/ci-testing/pulls/${{ github.event.number }}/commits'
-      #     method: 'GET'
-      #     contentType: application/vnd.github+json
-      #     bearerToken: ${{ secrets.GITHUB_TOKEN }}
-      #     customHeaders: '{"X-GitHub-Api-Version": "2022-11-28"}'
-
-      # - name: Show Response 2
-      #   env:
-      #     GITHUB_CONTEXT: ${{ steps.myRequest.outputs.response }}
-      #   run: echo "$GITHUB_CONTEXT"
+      - name: Write a script to append a PR number to a commit
+        run: |-
+          echo '#!/bin/bash
+commit_file=.commit_message.txt
+commit_title=$(git log --pretty=format:"%s" -1)
+if [[ ! $commit_title =~ .*\#"$PR_NUMBER" ]]; then
+    git log --pretty=format:"%s #"$PR_NUMBER"%n%n%b" -1 > $commit_file
+    git commit --amend --allow-empty -F $commit_file
+fi
+rm -f $commit_file' > pr_number_to_commit.sh
 
       - name: Append PR title to commits
         env:
           PR_NUMBER: ${{ github.event.number }}
         run: >-
-          git -c sequence.editor=:
-          -c user.name=${{ github.event.pull_request.user.login }}
-          -c user.email=${{ github.event.pull_request.head.user.email }}
-          rebase -i origin/main -x 'sh .pr_num_to_commit.sh' &&
-          git log -2 &&
-          git remote -v &&
-          git status
+          git -c sequence.editor=: rebase -i origin/main -x 'sh pr_number_to_commit.sh'
+          git push
 
-      - name: Force push rebased commits to the merging branch
-        run: echo git push origin ${{ github.head_ref }} --force
-        # uses: ad-m/github-push-action@master
-        # with:
-        #   github_token: ${{ secrets.GITHUB_TOKEN }}
-        #   branch: ${{ github.head_ref }}
-        #   force: true
+      - name: Print branch
+        run: echo ${{ github.ref }}
+
+      # - name: Force push rebased commits to the merging branch
+      #   uses: ad-m/github-push-action@master
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: ${{ github.ref }}
+      #     force: true
