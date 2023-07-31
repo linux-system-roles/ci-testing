@@ -3,7 +3,6 @@
 A template for an ansible role which configures some GNU/Linux subsystem or
 service. A brief description of the role goes here.
 
-
 ## Requirements
 
 Any pre-requisites that may not be covered by Ansible itself or the role should
