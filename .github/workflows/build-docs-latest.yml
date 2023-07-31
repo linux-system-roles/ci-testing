@@ -10,7 +10,7 @@ on:  # yamllint disable-line rule:truthy
 permissions:
   contents: read
 jobs:
-  tag_release_publish:
+  build_docs_latest:
     runs-on: ubuntu-latest
     permissions:
       contents: write
