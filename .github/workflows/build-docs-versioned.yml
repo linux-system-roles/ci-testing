@@ -1,0 +1,43 @@
+---
+# yamllint disable rule:line-length
+name: Convert README.md to HTML for releases
+on:  # yamllint disable-line rule:truthy
+  release:
+    types:
+      - published
+permissions:
+  contents: read
+jobs:
+  tag_release_publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set env variable with release version
+        run: echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+
+      - name: Ensure that the version directory exists
+        run: mkdir "$RELEASE_VERSION"
+
+      - name: Convert README.md to HTML and save to the version directory
+        uses: docker://pandoc/core:latest
+        with:
+          args: >-
+            --from gfm --to html5 --toc --shift-heading-level-by=-1
+            --template https://raw.githubusercontent.com/linux-system-roles/auto-maintenance/47745a818c7c404bd5eb1ba6efb31e1b29c6bef2/GitHub.html5
+            --output "$RELEASE_VERSION/README.html" README.md
+
+      - name: Commit and push changes
+        run: |
+          git add "$RELEASE_VERSION/README.html"
+          git commit -m "Update README.html for the $RELEASE_VERSION release"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: docs
+
