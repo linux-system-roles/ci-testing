@@ -18,6 +18,25 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Ensure the docs branch
+        run: |
+          set -euxo pipefail
+          branch=docss
+          existed_in_remote=$(git ls-remote --heads origin $branch)
+
+          if [ -z "${existed_in_remote}" ]; then
+            echo "Creating $branch branch"
+            git config --global user.name "${{ github.actor }}"
+            git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+            git checkout --orphan $branch
+            git reset --hard
+            git commit --allow-empty -m "Initializing $branch branch"
+            git push origin $branch
+            echo "Created $branch branch"
+          else
+            echo "Branch $branch already exists"
+          fi
+
       - name: Checkout the docs branch
         uses: actions/checkout@v3
         with:

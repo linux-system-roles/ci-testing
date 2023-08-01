@@ -1,4 +1,4 @@
-# ci-testing test 6
+# ci-testing test 7
 
 A template for an ansible role which configures some GNU/Linux subsystem or
 service. A brief description of the role goes here.
