@@ -15,8 +15,16 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout the docs repository
         uses: actions/checkout@v3
+        with:
+          ref: docs
+
+      - name: Fetch README.md from the workflow repository
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: README.md
+          sparse-checkout-cone-mode: false
 
       - name: Ensure that the directory latest exists
         run: mkdir latest
@@ -41,4 +49,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs
-

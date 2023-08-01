@@ -13,14 +13,22 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout repository
+      - name: Checkout the docs repository
         uses: actions/checkout@v3
+        with:
+          ref: docs
+
+      - name: Fetch README.md from the workflow repository
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: README.md
+          sparse-checkout-cone-mode: false
 
       - name: Set env variable with release version
         run: echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
 
       - name: Ensure that the version directory exists
-        run: mkdir "${{ env.RELEASE_VERSION }}"
+        run: mkdir $RELEASE_VERSION
 
       - name: Convert README.md to HTML and save to the version directory
         uses: docker://pandoc/core:latest
@@ -28,14 +36,14 @@ jobs:
           args: >-
             --from gfm --to html5 --toc --shift-heading-level-by=-1
             --template https://raw.githubusercontent.com/linux-system-roles/auto-maintenance/47745a818c7c404bd5eb1ba6efb31e1b29c6bef2/GitHub.html5
-            --output "${{ env.RELEASE_VERSION }}"/README.html README.md
+            --output $RELEASE_VERSION/README.html README.md
 
       - name: Commit and push changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-          git add "${{ env.RELEASE_VERSION }}"/README.html
-          git commit -m "Update README.html for the "${{ env.RELEASE_VERSION }}" release"
+          git add $RELEASE_VERSION/README.html
+          git commit -m "Update README.html for the $RELEASE_VERSION release"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
