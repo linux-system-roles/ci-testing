@@ -59,7 +59,7 @@ jobs:
           set -euxo pipefail
           if [ ${{ github.event_name }} = release ]; then
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          elif [ ${{ github.event_name }} = push ];
+          elif [ ${{ github.event_name }} = push ]; then
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
           else
             echo Unsupported event
