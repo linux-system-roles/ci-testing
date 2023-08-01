@@ -18,19 +18,19 @@ jobs:
     permissions:
       contents: write
     steps:
-      - name: Checkout the docs repository
+      - name: Checkout the docs branch
         uses: actions/checkout@v3
         with:
-          ref: docs
+          ref: docss
 
-      - name: Fetch README.md from the workflow repository
+      - name: Fetch README.md from the workflow branch
         uses: actions/checkout@v3
         with:
           sparse-checkout: README.md
           sparse-checkout-cone-mode: false
           path: ref_branch
 
-      - name: Set env variable with release version
+      - name: Set env variables based on whether run on release or on push
         run: |
           set -euxo pipefail
           if [ -n "${{ github.event.release.tag_name }}" ]; then
