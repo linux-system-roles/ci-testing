@@ -1,6 +1,6 @@
 ---
 # yamllint disable rule:line-length
-name: Convert README.md to HTML
+name: Convert README.md to HTML and push to docs branch
 on:  # yamllint disable-line rule:truthy
   push:
     branches:
@@ -57,10 +57,13 @@ jobs:
       - name: Set RELEASE_VERSION based on whether run on release or on push
         run: |
           set -euxo pipefail
-          if [ -n "${{ github.event.release.tag_name }}" ]; then
+          if [ ${{ github.event_name }} = release ]; then
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-          else
+          elif [ ${{ github.event_name }} = push ];
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
+          else
+            echo Unsupported event
+            exit 1
           fi
 
       - name: Ensure that the version directory exists
@@ -74,7 +77,7 @@ jobs:
             --template https://raw.githubusercontent.com/linux-system-roles/auto-maintenance/47745a818c7c404bd5eb1ba6efb31e1b29c6bef2/GitHub.html5
             --output ${{ env.RELEASE_VERSION }}/README.html ref_branch/README.md
 
-      - name: Commit and push changes
+      - name: Commit changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
@@ -86,4 +89,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs
-
