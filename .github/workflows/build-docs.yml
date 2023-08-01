@@ -55,7 +55,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add ${{ env.RELEASE_VERSION }}/README.html
-          git commit -m "Update README.html for the ${{ env.RELEASE_VERSION }} release"
+          git commit -m "Update README.html: ${{ github.event_name }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
