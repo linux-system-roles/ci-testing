@@ -37,6 +37,7 @@ jobs:
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
+          fi
 
       - name: Ensure that the version directory exists
         run: mkdir ${{ github.event.release.tag_name }}
