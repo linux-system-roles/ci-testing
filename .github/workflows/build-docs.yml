@@ -54,15 +54,13 @@ jobs:
           sparse-checkout-cone-mode: false
           path: ref_branch
 
-      - name: Set env variables based on whether run on release or on push
+      - name: Set RELEASE_VERSION based on whether run on release or on push
         run: |
           set -euxo pipefail
           if [ -n "${{ github.event.release.tag_name }}" ]; then
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
-            echo "EVENT_NAME=${{ github.event.release.name }}" >> $GITHUB_ENV
           else
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
-            echo "EVENT_NAME=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
           fi
 
       - name: Ensure that the version directory exists
@@ -76,16 +74,12 @@ jobs:
             --template https://raw.githubusercontent.com/linux-system-roles/auto-maintenance/47745a818c7c404bd5eb1ba6efb31e1b29c6bef2/GitHub.html5
             --output ${{ env.RELEASE_VERSION }}/README.html ref_branch/README.md
 
-      - name: Logging
-        run: |
-          echo "${{toJSON(github)}}"
-
       - name: Commit and push changes
         run: |
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add ${{ env.RELEASE_VERSION }}/README.html
-          git commit -m "Update for ${{ env.EVENT_NAME }}"
+          git commit -m "Update README.html for ${{ env.RELEASE_VERSION }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
