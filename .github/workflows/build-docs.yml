@@ -52,7 +52,7 @@ jobs:
 
       - name: Logging
         run: |
-          echo "${{toJSON(github.event)}}"
+          echo "${{toJSON(github)}}"
 
       - name: Commit and push changes
         run: |
