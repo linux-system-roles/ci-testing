@@ -40,7 +40,7 @@ jobs:
           fi
 
       - name: Ensure that the version directory exists
-        run: mkdir ${{ env.RELEASE_VERSION }}
+        run: mkdir -p ${{ env.RELEASE_VERSION }}
 
       - name: Convert README.md to HTML and save to the version directory
         uses: docker://pandoc/core:latest
