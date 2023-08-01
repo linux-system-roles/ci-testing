@@ -18,6 +18,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Checkout to get info about the docs branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
       - name: Ensure the docs branch
         run: |
           set -euxo pipefail
