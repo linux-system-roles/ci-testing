@@ -35,8 +35,10 @@ jobs:
           set -euxo pipefail
           if [ -n "${{ github.event.release.tag_name }}" ]; then
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
+            echo "EVENT_NAME=${{ github.event.release.name }}" >> $GITHUB_ENV
           else
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
+            echo "EVENT_NAME=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
           fi
 
       - name: Ensure that the version directory exists
@@ -59,7 +61,7 @@ jobs:
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add ${{ env.RELEASE_VERSION }}/README.html
-          git commit -m "Update README.html: ${{ github.event_name }}"
+          git commit -m "Update for ${{ env.EVENT_NAME }}"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
