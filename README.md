@@ -11,6 +11,7 @@ good idea to mention in this section that the `boto` package is required.
 
 ## Role Variables
 
+
 A description of all input variables (i.e. variables that are defined in
 `defaults/main.yml`) for the role should go here as these form an API of the
 role.
