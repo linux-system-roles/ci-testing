@@ -26,7 +26,7 @@ jobs:
       - name: Ensure the docs branch
         run: |
           set -euxo pipefail
-          branch=docss
+          branch=docssss
           existed_in_remote=$(git ls-remote --heads origin $branch)
 
           if [ -z "${existed_in_remote}" ]; then
@@ -45,7 +45,7 @@ jobs:
       - name: Checkout the docs branch
         uses: actions/checkout@v3
         with:
-          ref: docss
+          ref: docsss
 
       - name: Fetch README.md from the workflow branch
         uses: actions/checkout@v3
@@ -91,5 +91,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: docs
+          branch: docsss
 
