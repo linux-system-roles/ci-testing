@@ -33,7 +33,7 @@ jobs:
       - name: Set env variable with release version
         run: |
           set -euxo pipefail
-          if [ -n ${{ github.event.release.tag_name }} ]; then
+          if [ -n "${{ github.event.release.tag_name }}" ]; then
             echo "RELEASE_VERSION=${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
             echo "RELEASE_VERSION=latest" >> $GITHUB_ENV
