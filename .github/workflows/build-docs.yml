@@ -50,6 +50,10 @@ jobs:
             --template https://raw.githubusercontent.com/linux-system-roles/auto-maintenance/47745a818c7c404bd5eb1ba6efb31e1b29c6bef2/GitHub.html5
             --output ${{ env.RELEASE_VERSION }}/README.html ref_branch/README.md
 
+      - name: Logging
+        run: |
+          echo "${{toJSON(github.event)}}"
+
       - name: Commit and push changes
         run: |
           git config --global user.name "${{ github.actor }}"
