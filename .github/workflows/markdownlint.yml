@@ -24,3 +24,4 @@ jobs:
         uses: docker://avtodev/markdown-lint:master # fastest way
         with:
           args: README.md
+          config: .markdownlint.yaml
