@@ -63,26 +63,28 @@ MD012:
   # Consecutive blank lines
   maximum: 1
 
+# GFM does not limit line length
 # MD013/line-length - Line length
-MD013:
-  # Number of characters
-  line_length: 80
-  # Number of characters for headings
-  heading_line_length: 80
-  # Number of characters for code blocks
-  code_block_line_length: 80
-  # Include code blocks
-  code_blocks: true
-  # Include tables
-  tables: true
-  # Include headings
-  headings: true
-  # Include headings
-  headers: true
-  # Strict length checking
-  strict: false
-  # Stern length checking
-  stern: false
+MD013: false
+  # # Number of characters
+  # # line_length: 80
+  # line_length: 999
+  # # Number of characters for headings
+  # heading_line_length: 80
+  # # Number of characters for code blocks
+  # code_block_line_length: 80
+  # # Include code blocks
+  # code_blocks: true
+  # # Include tables
+  # tables: true
+  # # Include headings
+  # headings: true
+  # # Include headings
+  # headers: true
+  # # Strict length checking
+  # strict: false
+  # # Stern length checking
+  # stern: false
 
 # MD014/commands-show-output - Dollar signs used before commands without showing output
 MD014: true
@@ -109,12 +111,9 @@ MD022:
 # MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line
 MD023: true
 
+# Disabling to allow for repeating titles to enhance readability with parallel structure
 # MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content
-MD024:
-  # Only check sibling headings
-  allow_different_nesting: false
-  # Only check sibling headings
-  siblings_only: false
+MD024: false
 
 # MD025/single-title/single-h1 - Multiple top-level headings in the same document
 MD025:
@@ -202,14 +201,15 @@ MD041:
 # MD042/no-empty-links - No empty links
 MD042: true
 
+# Disabling, we do not need this
 # MD043/required-headings/required-headers - Required heading structure
 MD043:
-  # List of headings
-  headings: []
-  # List of headings
-  headers: []
-  # Match case of headings
-  match_case: false
+  # # List of headings
+  # headings: []
+  # # List of headings
+  # headers: []
+  # # Match case of headings
+  # match_case: false
 
 # MD044/proper-names - Proper names should have the correct capitalization
 MD044:
