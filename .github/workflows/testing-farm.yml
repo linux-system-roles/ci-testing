@@ -1,0 +1,32 @@
+name: Schedule test on Testing Farm
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    # Let's schedule tests only on user request. NOT automatically.
+    # Only repository owner or member can schedule tests
+    # if: |
+    #   github.event.issue.pull_request
+    #   && contains(github.event.comment.body, '[test]')
+    #   && contains(fromJson('["OWNER", "MEMBER"]'), github.event.comment.author_association)
+    steps:
+      - name: dump github event
+        run: |
+          echo '${{ toJSON(github.event) }}' || :
+
+      - name: Checkout repo and switch to corresponding pull request
+        uses: actions/checkout@v2
+        with:
+          ref: refs/pull/${{ github.event.issue.number }}/head
+
+      - name: Schedule test on Testing Farm
+        uses: sclorg/testing-farm-as-github-action@v1
+        with:
+          api_key: ${{ secrets.TF_API_KEY }}
+          git_url: ${{ github.event.repository.html_url }}
+          git_ref: refs/pull/${{ github.event.issue.number }}/head
+          debug: true

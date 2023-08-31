@@ -19,6 +19,20 @@
     name: "{{ __template_packages }}"
     state: present
 
+- name: use crypttab
+  crypttab:
+
+- name: use firewalld
+  firewalld:
+
+- name: use ipaddr
+  debug:
+    msg: ipaddr {{ '127.0.0.1' | ipaddr }}
+
+- name: use json_query
+  debug:
+    msg: json_query {{ ansible_facts | json_query('name') }}
+
 - name: Ensure required services are enabled and started
   service:
     name: "{{ item }}"
