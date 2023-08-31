@@ -3,6 +3,6 @@
   hosts: all
 
   roles:
-    - linux-system-roles.template
+    - linux-system-roles.ci-testing
 
 

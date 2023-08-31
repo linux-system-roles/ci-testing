@@ -4,9 +4,5 @@
   hosts: all
 
   roles:
-    - linux-system-roles.ci-testing
+    - linux-system-roles.wrong
 
-  tasks:
-    - name: Fail task
-      fail:
-        msg: expected fail
