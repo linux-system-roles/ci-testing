@@ -5,3 +5,8 @@
 
   roles:
     - linux-system-roles.template
+
+  tasks:
+    - name: Fail task
+      fail:
+        msg: expected fail
