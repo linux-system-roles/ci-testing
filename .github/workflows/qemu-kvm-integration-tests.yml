@@ -16,7 +16,7 @@ permissions:
 jobs:
   scenario:
     if: inputs.requested || github.event_name != 'issue_comment'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     strategy:
       fail-fast: false
@@ -135,46 +135,22 @@ jobs:
           sudo apt install -y --no-install-recommends git ansible-core genisoimage qemu-system-x86
           pip3 install "git+https://github.com/linux-system-roles/tox-lsr@d594be24ed56e586a5796720d51c261e40c20496"
 
-      - name: Ensure use of podman 5 or later
+      - name: Check for podman version 5 or higher
+        id: check_podman_version
         if: steps.check_platform.outputs.supported
         run: |
-          set -euo pipefail
-          podman_is_supported() {
-            local version
-            version=$(podman --version 2>/dev/null) || return 1
-            echo "$version"
-            version="${version##* }"
-            version="${version%%.*}"
-            [[ "$version" =~ ^[0-9]+$ ]] && (( version >= 5 ))
-          }
-
-          if ! podman_is_supported; then
-            # Pin Podman and its dependencies, keeping other packages on Noble.
-            # https://github.com/podman-container-tools/podman/discussions/25582
-            echo 'deb [signed-by=/usr/share/keyrings/ubuntu-archive-keyring.gpg] https://archive.ubuntu.com/ubuntu plucky main universe' | \
-              sudo tee /etc/apt/sources.list.d/podman.list
-            sudo tee /etc/apt/preferences.d/podman > /dev/null <<'EOF'
-          Package: podman buildah golang-github-containers-common golang-github-containers-image crun conmon containers-storage catatonit
-          Pin: release n=plucky
-          Pin-Priority: 991
-
-          Package: libgpgme11t64 libgpg-error0 libsubid5 netavark passt aardvark-dns containernetworking-plugins libslirp0 slirp4netns uidmap
-          Pin: release n=plucky
-          Pin-Priority: 991
-
-          Package: *
-          Pin: release n=plucky
-          Pin-Priority: 400
-          EOF
-            sudo apt-get update
-            sudo apt-get install -y --no-install-recommends podman buildah uidmap slirp4netns passt aardvark-dns catatonit
+          podman_version=$(podman version -f '{{.Client.Version}}')
+          podman_major_version="${podman_version%%.*}"
+          echo "Podman version: $podman_version"
+          if [ "$podman_major_version" -lt 5 ]; then
+            echo "need_podman_update=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "need_podman_update=0" >> "$GITHUB_OUTPUT"
           fi
 
-          # Fail before running tests if installation left an older/missing Podman.
-          podman_is_supported || {
-            echo '::error::Podman 5 or later is required'
-            exit 1
-          }
+      - name: Ensure use of podman 5
+        if: steps.check_platform.outputs.supported && steps.check_podman_version.outputs.need_podman_update == 1
+        uses: redhat-actions/podman-install@6daab8b71872b8595fa4e0d3126da360afea3c3c  # main
 
       - name: Configure tox-lsr
         if: steps.check_platform.outputs.supported
