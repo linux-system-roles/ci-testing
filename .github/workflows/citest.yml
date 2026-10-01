@@ -9,7 +9,6 @@ permissions:
   actions: read
   contents: read
   pull-requests: read
-  security-events: write
   statuses: write
 
 jobs:
@@ -35,20 +34,8 @@ jobs:
           REPO: ${{ github.repository }}
         run: |
           set -euo pipefail
-          if [ "$COMMENTER" != systemroller ]; then
-            permission=$(gh api \
-              "repos/${REPO}/collaborators/${COMMENTER}/permission" \
-              --jq '.permission')
-            case "$permission" in
-              admin|maintain|write) ;;
-              *)
-                echo "@${COMMENTER} does not have permission to run CI tests" >&2
-                exit 1
-                ;;
-            esac
-          fi
-
           command_line=${COMMENT_BODY%%$'\n'*}
+          command_line=${command_line%$'\r'}
           read -r -a words <<<"$command_line"
           if [ "${words[0]-}" != /citest ] || [ -z "${words[1]-}" ]; then
             echo 'Usage: /citest all | /citest linters | /citest integration | /citest WORKFLOW [WORKFLOW ...]' >&2
@@ -220,6 +207,12 @@ jobs:
   codeql:
     needs: parse
     if: contains(fromJSON(needs.parse.outputs.selected), 'codeql')
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+      security-events: write
+      statuses: write
     uses: ./.github/workflows/codeql.yml
     with:
       requested: true
